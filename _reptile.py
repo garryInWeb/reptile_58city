@@ -7,17 +7,23 @@ def _reptile(url):
 
 def _Analysis(html):
     soup = BeautifulSoup(html,'html.parser')
-    listUL = soup.find_all('ul',class_='listUl')
-    list_house_list = listUL[0].find_all('li')
+    _li_list = soup.find_all('li')
     _house_list_information = []
-    for item in list_house_list:
+    for item in _li_list[1:]:
         _house_information = {}
-        if(item.find_all('p',class_='room') is not None):
-            _house_information['_room_area'] = item.find_all('p',class_='room')[0].string
-        #if(item.find_all('div',class_='money') is not None):
-            # _house_information['_money'] = item.find_all('div',class_='money')[0].find_all('b')[0].string
-        #_location = item.find_all('p',class_='add')[0]
+        if (item.find('p', class_='room') is not None):
+            _room_area = item.find('p', class_='room')
+        if (_room_area is not None):
+            _house_information['_room_area'] = _clean_string(_room_area.string)
+        if(item.find('div',class_='money') is not None):
+            _money = item.find('div',class_='money').find('b')
+            if (_money is not None):
+                _house_information['_money'] = _money.string
         _house_list_information.append(_house_information)
     print(_house_list_information)
+def _clean_string(string):
+    result = string.replace(' ','')
+    result = result.replace('\xa0','')
+    return result
 html = _reptile('http://sz.58.com/chuzu/pn1/')
 _Analysis(html)
