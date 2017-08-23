@@ -161,7 +161,7 @@ function loadWorkLocation() {
 function loadRentLocationByFile(fileName) {
     delRentLocation();
     //var rent_locations = new Set();
-    $.post(fileName, function(data) {
+    $.get(fileName, function(data) {
         data = data.split("\n");
         data.forEach(function(item, index) {
             //if(item.split(",")[4] != null)
