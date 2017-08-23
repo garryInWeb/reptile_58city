@@ -2,6 +2,10 @@ from urllib import request
 from bs4 import BeautifulSoup
 import csv
 def _reptile(url):
+    proxy = 'http://proxy.tencent.com:8080'
+    proxy_support = request.ProxyHandler({'http':proxy})
+    opener = request.build_opener(proxy_support)
+    request.install_opener(opener)
     resp = request.urlopen(url)
     html_data = resp.read().decode('utf-8')
     return html_data
@@ -41,7 +45,7 @@ def _clean_string(string):
     result = string.replace(' ','')
     return result
 def csv_write(str):
-    with open('58_house_informaiton', 'w', newline='') as csvfile:
+    with open('58_house_informaiton.csv', 'w', newline='',encoding='utf-8') as csvfile:
         fieldname = ['room_area', 'money','link','room_location_district','room_location_place','room_location_street']
         writer = csv.DictWriter(csvfile, fieldnames=fieldname)
         writer.writeheader()
@@ -49,7 +53,8 @@ def csv_write(str):
             writer.writerow({'room_area': item['_room_area'], 'money': item['_money'],'link':item['_link'],'room_location_district':item['_room_location_district'],
                              'room_location_place':item['_room_location_place'],'room_location_street':item['_room_location_street']})
 list = []
-for i in range(60):
+for i in range(10):
     html = _reptile('http://sz.58.com/chuzu/pn' + str(i) + '/')
     list += _Analysis(html)
+    print(list)
 csv_write(list)
