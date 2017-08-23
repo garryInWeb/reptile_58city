@@ -39,7 +39,7 @@ function takeSubway(radio) {
 }
 
 function importRentInfo(fileInfo) {
-    loadRentLocationByFile("58_house_information");
+    loadRentLocationByFile("58_house_informaiton");
 }
 
 function workLocationSelected(e) {
