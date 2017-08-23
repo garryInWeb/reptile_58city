@@ -41,7 +41,7 @@ def _clean_string(string):
     result = string.replace(' ','')
     return result
 def csv_write(str):
-    with open('58_house_informaiton', 'w', newline='') as csvfile:
+    with open('58_house_informaiton_dg.csv', 'w', newline='') as csvfile:
         fieldname = ['room_area', 'money','link','room_location_district','room_location_place','room_location_street']
         writer = csv.DictWriter(csvfile, fieldnames=fieldname)
         writer.writeheader()
@@ -50,6 +50,6 @@ def csv_write(str):
                              'room_location_place':item['_room_location_place'],'room_location_street':item['_room_location_street']})
 list = []
 for i in range(60):
-    html = _reptile('http://sz.58.com/chuzu/pn' + str(i) + '/')
+    html = _reptile('http://dg.58.com/chuzu/pn' + str(i) + '/')
     list += _Analysis(html)
 csv_write(list)
