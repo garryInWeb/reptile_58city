@@ -30,12 +30,6 @@
             <input type="radio" name="vehicle" value="SUBWAY" onclick="takeSubway(this)" checked/>地铁
         </div>
     </div>
-    <div class="control-entry">
-        <label>导入房源文件：</label>
-        <div class="control-input">
-            <input type="file" name="file" onchange="importRentInfo(this)">
-        </div>
-    </div>
 </div>
 <div class="button-group">
     <input id="cityName" class="inputtext" placeholder="请输入城市的名称" type="text"/>
@@ -53,6 +47,7 @@
         }
         map.setCity(cityName);
     });
+    importRentInfo();
 </script>
 </body>
 </html>
