@@ -80,13 +80,21 @@ function loadWorkRange(x, y, t, color, v) {
     });
 }
 
-function addMarkerByAddress(address) {
+function addMarkerByAddress(item) {
     var geocoder = new AMap.Geocoder({
-        city: "北京",
+        city: "深圳",
         radius: 1000
     });
+    var address;
+    if(item.split("\t")[4] == null) {
+        console.log(address);
+        return;
+    }
+    else
+       address = item.split("\t")[4];
     geocoder.getLocation(address, function(status, result) {
         if (status === "complete" && result.info === 'OK') {
+            console.log(address);
             var geocode = result.geocodes[0];
             rentMarker = new AMap.Marker({
                 map: map,
@@ -96,22 +104,26 @@ function addMarkerByAddress(address) {
             });
             rentMarkerArray.push(rentMarker);
 
-            rentMarker.content = "<div>房源：<a target = '_blank' href='http://bj.58.com/pinpaigongyu/?key=" + address + "'>" + address + "</a><div>"
+            rentMarker.content =
+                "<div>" +
+                "<div>房源：<a target = '_blank' href='" + item.split('\t')[2] + "'>" + address +
+                "</a></div><div>平米："+item.split('\t')[0]+"</div><div>价钱："+item.split('\t')[1]+"</div></div>"
+
             rentMarker.on('click', function(e) {
                 infoWindow.setContent(e.target.content);
                 infoWindow.open(map, e.target.getPosition());
-                if (amapTransfer) amapTransfer.clear();
-                amapTransfer = new AMap.Transfer({
-                    map: map,
-                    policy: AMap.TransferPolicy.LEAST_TIME,
-                    city: "北京市",
-                    panel: 'transfer-panel'
-                });
-                amapTransfer.search([{
-                    keyword: workAddress
-                }, {
-                    keyword: address
-                }], function(status, result) {})
+                // if (amapTransfer) amapTransfer.clear();
+                // amapTransfer = new AMap.Transfer({
+                //     map: map,
+                //     policy: AMap.TransferPolicy.LEAST_TIME,
+                //     city: "深圳市",
+                //     panel: 'transfer-panel'
+                // });
+                // amapTransfer.search([{
+                //     keyword: workAddress
+                // }, {
+                //     keyword: address
+                // }], function(status, result) {})
             });
         }
     })
@@ -149,15 +161,16 @@ function loadWorkLocation() {
 
 function loadRentLocationByFile(fileName) {
     delRentLocation();
-    var rent_locations = new Set();
-    $.get(fileName, function(data) {
+    //var rent_locations = new Set();
+    $.post(fileName, function(data) {
         data = data.split("\n");
         data.forEach(function(item, index) {
-            if(item.split(",")[4] != null)
-                rent_locations.add(item.split(",")[4]);
+            //if(item.split(",")[4] != null)
+              //  rent_locations.add(item.split(",")[4]);
+            addMarkerByAddress(item);
         });
-        rent_locations.forEach(function(element, index) {
-            addMarkerByAddress(element);
-        });
+        // rent_locations.forEach(function(element, index) {
+        //     addMarkerByAddress(element);
+        // });
     });
 }
